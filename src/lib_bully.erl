@@ -32,8 +32,6 @@
 %% External functions
 %% ====================================================================
 get_nodes()->
-    % ?get_nodes().
-  %  {ok,BullyApp}=application:get_env(bully_test,bully_app),
-    
-    %lists:delete(node(),sd:get(BullyApp)).
-    lists:delete(node(),sd:get(bully_test)).
+    {ok,BullyApp}=application:get_env(application),
+    lists:delete(node(),sd:get(BullyApp)).
+  %  lists:delete(node(),sd:get(bully_test)).

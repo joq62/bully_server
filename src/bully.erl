@@ -18,7 +18,8 @@
 	 coordinator_message/1,
 	 start_election/0,
 	 who_is_leader/0,
-	 am_i_leader/1
+	 am_i_leader/1,
+	 ping/0
 	]).
 
 %% --------------------------------------------------------------------
@@ -60,6 +61,7 @@
 
 start()-> gen_server:start_link({local, ?SERVER}, ?SERVER, [], []).
 stop()-> gen_server:call(?SERVER, {stop},infinity).
+ping()-> gen_server:call(?SERVER, {ping},infinity).
 
 status()->
     gen_server:call(?SERVER,{status},infinity).

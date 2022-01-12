@@ -14,7 +14,7 @@
 %% --------------------------------------------------------------------
 %% Include files
 %% --------------------------------------------------------------------
-% -include("").
+-include("log.hrl").
 %% --------------------------------------------------------------------
 -define(WAIT_FOR_ELECTION_RESPONSE_TIMEOUT,5*100).
 
@@ -50,7 +50,7 @@ init([]) ->
 %    io:format("bully 1 ~p~n",[{?MODULE,?LINE}]),
     bully:start_election(),
     timer:sleep(?WAIT_FOR_ELECTION_RESPONSE_TIMEOUT+1000),
- %   io:format("bully 2 ~p~n",[{?MODULE,?LINE}]),
+    rpc:cast(node(),log,log,[?Log_info("server started",[])]),
     {ok, #state{nodes = [],
 		coordinator_node = node(), 
 		pid_timeout=no_pid}}.
@@ -74,6 +74,10 @@ handle_call({am_i_leader,CallingNode},_From, State) ->
     {reply, Reply, State};
 handle_call({status},_From, State) ->
     Reply = State,
+    {reply, Reply, State};
+
+handle_call({ping},_From, State) ->
+    Reply = pong,
     {reply, Reply, State};
 
 handle_call({stop}, _From, State) ->
@@ -181,7 +185,7 @@ code_change(_OldVsn, State, _Extra) ->
 %% Returns: non
 %% --------------------------------------------------------------------
 start_election(State) ->
-    io:format("Election started by Node ~p~n",[{node(),?FUNCTION_NAME,?MODULE,?LINE}]),
+%    io:format("Election started by Node ~p~n",[{node(),?FUNCTION_NAME,?MODULE,?LINE}]),
 %    rpc:cast(node(),db_logger,create,["log","election started",atom_to_list(node()),{?MODULE,?FUNCTION_NAME,?LINE}]),
 %    {ok,Nodes}=application:get_env(bully,nodes),   
      Nodes=lib_bully:get_nodes(),
@@ -201,7 +205,7 @@ start_election(State) ->
 %% Returns: non
 %% --------------------------------------------------------------------
 win_election( State) ->
-    io:format("Node  won the election ~p~n", [{node(),?FUNCTION_NAME,?MODULE,?LINE}]),
+  %  io:format("Node  won the election ~p~n", [{node(),?FUNCTION_NAME,?MODULE,?LINE}]),
  %   rpc:cast(node(),db_logger,create,["log","election winner",atom_to_list(node()),{?MODULE,?FUNCTION_NAME,?LINE}]),
 %    {ok,Nodes}=application:get_env(bully,nodes),
     Nodes=lib_bully:get_nodes(), 

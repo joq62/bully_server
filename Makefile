@@ -3,11 +3,8 @@ all:
 	rm -rf ebin/* *_ebin;
 	rm -rf src/*.beam *.beam  test_src/*.beam test_ebin;
 	rm -rf  *~ */*~  erl_cra*;
-	rm -rf *_specs *_config *.log;
-#	common
-	erlc -I ../../include -I include -o ebin ../../common/src/*.erl;
 #	app
-	erlc -o ebin src/*.erl;
+	erlc -I ../log_server/include -o ebin src/*.erl;
 	echo Done
 unit_test:
 	rm -rf ebin/* src/*.beam *.beam test_src/*.beam test_ebin;
